@@ -6,10 +6,13 @@
 #include <QtCore/QtGlobal>
 #include <QLabel>
 
+#include "settingsdialog.h"
+
 namespace Ui {
 class MainWindow;
 }
 
+class SettingsDialog;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -19,6 +22,13 @@ public:
     ~MainWindow();
 
 private slots:
+    void readData();
+    void writeData(const QByteArray &data);
+    void openSerialPort();
+    void closeSerialPort();
+    void about();
+    void handleError(QSerialPort::SerialPortError error);
+
     void on_actionsetBands_triggered();
 
     void on_pushButton_clicked();
@@ -39,14 +49,20 @@ private slots:
 
     void on_pushButton_mox_clicked();
 
+    void on_actionConnect_triggered();
+
+    void on_actionDisconnect_triggered();
+
+    void on_actionSettings_triggered();
+
 private:
     Ui::MainWindow *ui;
 
     void showStatusMessage(const QString &message);
     QLabel *status;
 //    Console *console;
-//    SettingsDialog *settings;
-//    QSerialPort *serial;
+    SettingsDialog *settings;
+    QSerialPort *serial;
     QByteArray myData;
 };
 

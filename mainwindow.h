@@ -26,12 +26,14 @@ private slots:
     void writeData(const QByteArray &data);
     void openSerialPort();
     void closeSerialPort();
-    void about();
+//    void about();
     void handleError(QSerialPort::SerialPortError error);
 
     void on_actionsetBands_triggered();
 
     void on_pushButton_clicked();
+
+    void on_pushButton_1_clicked();
 
     void on_pushButton_2_clicked();
 
@@ -44,8 +46,6 @@ private slots:
     void on_pushButton_6_clicked();
 
     void on_pushButton_7_clicked();
-
-    void on_pushButton_8_clicked();
 
     void on_pushButton_mox_clicked();
 

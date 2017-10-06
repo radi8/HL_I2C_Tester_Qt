@@ -21,7 +21,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(serial, &QSerialPort::readyRead, this, &MainWindow::readData);
 //    connect(console, &Console::getData, this, &MainWindow::writeData);
 //    connect(ui->actionSettings, &QAction::triggered, settings, &SettingsDialog::show);
-
 }
 
 MainWindow::~MainWindow()
@@ -306,6 +305,6 @@ void MainWindow::on_actionDisconnect_triggered()
 
 void MainWindow::on_actionSettings_triggered()
 {
-
+    settings->show();
 }
 

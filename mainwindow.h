@@ -7,12 +7,14 @@
 #include <QLabel>
 
 #include "settingsdialog.h"
+//#include "banddialog.h"
 
 namespace Ui {
 class MainWindow;
 }
 
-class SettingsDialog;
+//class SettingsDialog;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -64,8 +66,8 @@ private:
 
     void showStatusMessage(const QString &message);
     QLabel *status;
-//    Console *console;
     SettingsDialog *settings;
+//    bandDialog *band;
     QSerialPort *serial;
     QByteArray myData;
 };

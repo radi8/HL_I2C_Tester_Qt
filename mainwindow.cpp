@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "banddialog.h"
 
 #include <QMessageBox>
 #include <QtSerialPort/QSerialPort>
@@ -92,9 +93,16 @@ void MainWindow::showStatusMessage(const QString &message)
     status->setText(message);
 }
 
+void MainWindow::on_actionSettings_triggered()
+{
+    settings->show();
+}
+
 void MainWindow::on_actionsetBands_triggered()
 {
-
+    bandDialog band;
+    band.setModal(true);
+    band.exec();
 }
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)
@@ -309,12 +317,6 @@ void MainWindow::on_actionDisconnect_triggered()
     ui->actionSettings->setEnabled(true);
     showStatusMessage(tr("Disconnected"));
 }
-
-void MainWindow::on_actionSettings_triggered()
-{
-    settings->show();
-}
-
 
 void MainWindow::on_actionExit_triggered()
 {

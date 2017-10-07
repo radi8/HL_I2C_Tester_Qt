@@ -26,15 +26,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    settingsdialog.cpp
+    settingsdialog.cpp \
+    banddialog.cpp
 
 HEADERS += \
         mainwindow.h \
-    settingsdialog.h
+    settingsdialog.h \
+    banddialog.h
 
 FORMS += \
         mainwindow.ui \
-    settingsdialog.ui
+    settingsdialog.ui \
+    banddialog.ui
 
 RESOURCES += \
     myresources.qrc

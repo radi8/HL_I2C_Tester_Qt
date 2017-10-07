@@ -73,6 +73,11 @@ void MainWindow::writeData(const QByteArray &data)
     serial->write(data);
 }
 
+void MainWindow::on_actionClear_Display_triggered()
+{
+    ui->plainTextEdit->clear();
+}
+
 void MainWindow::readData()
 {
     QByteArray data = serial->readAll();
@@ -310,3 +315,8 @@ void MainWindow::on_actionSettings_triggered()
     settings->show();
 }
 
+
+void MainWindow::on_actionExit_triggered()
+{
+    MainWindow::close();
+}

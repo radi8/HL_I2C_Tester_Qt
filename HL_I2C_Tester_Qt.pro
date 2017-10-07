@@ -35,3 +35,6 @@ HEADERS += \
 FORMS += \
         mainwindow.ui \
     settingsdialog.ui
+
+RESOURCES += \
+    myresources.qrc

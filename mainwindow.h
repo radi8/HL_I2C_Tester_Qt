@@ -55,6 +55,10 @@ private slots:
 
     void on_actionSettings_triggered();
 
+    void on_actionExit_triggered();
+
+    void on_actionClear_Display_triggered();
+
 private:
     Ui::MainWindow *ui;
 

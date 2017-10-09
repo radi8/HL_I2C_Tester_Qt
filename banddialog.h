@@ -2,6 +2,7 @@
 #define BANDDIALOG_H
 
 #include <QDialog>
+#include <QSettings>
 
 namespace Ui {
 class bandDialog;
@@ -17,6 +18,8 @@ public:
 
 private:
     Ui::bandDialog *ui;
+    void writeSettings();
+    void readSettings();
 };
 
 #endif // BANDDIALOG_H

@@ -1,11 +1,22 @@
 #include "banddialog.h"
 #include "ui_banddialog.h"
+#include <QDebug>
 
 bandDialog::bandDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::bandDialog)
 {
     ui->setupUi(this);
+
+    QList<QCheckBox *> l_checkboxes = ui->frame->findChildren<QCheckBox *>();
+
+// qDebug() << Q_FUNC_INFO << "socket already connected, waiting for process to
+
+    qDebug() << Q_FUNC_INFO << "l_checkboxes = " << l_checkboxes.length();
+    for(int x = 0x00; x <0x0A; x++) {
+        qDebug() << Q_FUNC_INFO << "l_checkboxes = " << l_checkboxes.value(x) << " x = " << x;
+    }
+
     readSettings();
 }
 

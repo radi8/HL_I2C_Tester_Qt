@@ -1846,7 +1846,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox">
+      <widget class="QCheckBox" name="checkBox_1">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -3701,7 +3701,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBoxR">
+      <widget class="QCheckBox" name="checkBoxR_1">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -4221,7 +4221,7 @@
   <tabstop>checkBox_63</tabstop>
   <tabstop>checkBox_64</tabstop>
   <tabstop>checkBox_9</tabstop>
-  <tabstop>checkBox</tabstop>
+  <tabstop>checkBox_1</tabstop>
   <tabstop>checkBox_2</tabstop>
   <tabstop>checkBox_3</tabstop>
   <tabstop>checkBox_4</tabstop>
@@ -4277,7 +4277,7 @@
   <tabstop>checkBoxR_30</tabstop>
   <tabstop>checkBoxR_31</tabstop>
   <tabstop>checkBoxR_32</tabstop>
-  <tabstop>checkBoxR</tabstop>
+  <tabstop>checkBoxR_1</tabstop>
   <tabstop>checkBoxR_2</tabstop>
   <tabstop>checkBoxR_3</tabstop>
   <tabstop>checkBoxR_4</tabstop>

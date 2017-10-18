@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QSettings>
+#include <QCheckBox>
 
 namespace Ui {
 class bandDialog;
@@ -20,6 +21,8 @@ private:
     Ui::bandDialog *ui;
     void writeSettings();
     void readSettings();
+    QList<QCheckBox *> l_checkboxes;
+    QList<QCheckBox *> r_checkboxes;
 };
 
 #endif // BANDDIALOG_H

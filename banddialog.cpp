@@ -8,16 +8,49 @@ bandDialog::bandDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QList<QCheckBox *> l_checkboxes = ui->frame->findChildren<QCheckBox *>();
+//    QList<QCheckBox *> l_checkboxes = ui->frame->findChildren<QCheckBox *>(QString());
+    l_checkboxes = ui->frame->findChildren<QCheckBox *>(QString());
+    r_checkboxes = ui->frame_3->findChildren<QCheckBox *>(QString());
 
-// qDebug() << Q_FUNC_INFO << "socket already connected, waiting for process to
+    int cbLen = l_checkboxes.length();
+    int a, b;
+    bool swapped = true;
 
-    qDebug() << Q_FUNC_INFO << "l_checkboxes = " << l_checkboxes.length();
-    for(int x = 0x00; x <0x0A; x++) {
-        qDebug() << Q_FUNC_INFO << "l_checkboxes = " << l_checkboxes.value(x) << " x = " << x;
+    qDebug() << Q_FUNC_INFO << "l_checkboxes = " << cbLen;
+    while (swapped) {
+        swapped = false;
+        for(int x = 0; x < (cbLen-1); x++) {
+            a = ((l_checkboxes[x]->objectName()).mid(9)).toInt();
+            b = ((l_checkboxes[x+1]->objectName()).mid(9)).toInt();
+            if(b < a){
+                l_checkboxes.swap(x,(x+1));
+                swapped = true;
+            }
+        }
+    }
+
+    cbLen = r_checkboxes.length();
+    swapped = true;
+    while (swapped) {
+        swapped = false;
+        for(int x = 0; x < (cbLen-1); x++) {
+            a = ((r_checkboxes[x]->objectName()).mid(10)).toInt();
+            b = ((r_checkboxes[x+1]->objectName()).mid(10)).toInt();
+            if(b < a){
+                r_checkboxes.swap(x,(x+1));
+                swapped = true;
+            }
+        }
     }
 
     readSettings();
+
+    QString s = l_checkboxes[9]->objectName();
+    qDebug() << s << l_checkboxes[9]->isChecked();
+    qDebug() << "checkBox_18 = " << ui->checkBox_18->isChecked();
+    qDebug() << l_checkboxes;
+    qDebug() << "";
+    qDebug() << r_checkboxes;
 }
 
 bandDialog::~bandDialog()
@@ -43,7 +76,10 @@ void bandDialog::writeSettings()
 
     //Transmit checkBoxes
     //Band 0
-    settings.setValue("cb1", ui->checkBox->isChecked());
+
+    qDebug() << "l_checkboxes[0] value = " << l_checkboxes[0]->isChecked();
+
+    settings.setValue("cb1", ui->checkBox_1->isChecked());
     settings.setValue("cb2", ui->checkBox_2->isChecked());
     settings.setValue("cb3", ui->checkBox_3->isChecked());
     settings.setValue("cb4", ui->checkBox_4->isChecked());
@@ -117,7 +153,7 @@ void bandDialog::writeSettings()
 
     //Receive checkBoxes
     //Band 0
-    settings.setValue("cbr1", ui->checkBoxR->isChecked());
+    settings.setValue("cbr1", ui->checkBoxR_1->isChecked());
     settings.setValue("cbr2", ui->checkBoxR_2->isChecked());
     settings.setValue("cbr3", ui->checkBoxR_3->isChecked());
     settings.setValue("cbr4", ui->checkBoxR_4->isChecked());
@@ -213,7 +249,7 @@ void bandDialog::readSettings()
 
     //Transmit checkBoxes
     //Band 0
-    ui->checkBox->setChecked(settings.value("cb1", false).toBool());
+    ui->checkBox_1->setChecked(settings.value("cb1", false).toBool());
     ui->checkBox_2->setChecked(settings.value("cb2", false).toBool());
     ui->checkBox_3->setChecked(settings.value("cb3", false).toBool());
     ui->checkBox_4->setChecked(settings.value("cb4", false).toBool());
@@ -287,7 +323,7 @@ void bandDialog::readSettings()
 
     //Receive checkBoxes
     //Band 0
-    ui->checkBoxR->setChecked(settings.value("cbr1", false).toBool());
+    ui->checkBoxR_1->setChecked(settings.value("cbr1", false).toBool());
     ui->checkBoxR_2->setChecked(settings.value("cbr2", false).toBool());
     ui->checkBoxR_3->setChecked(settings.value("cbr3", false).toBool());
     ui->checkBoxR_4->setChecked(settings.value("cbr4", false).toBool());

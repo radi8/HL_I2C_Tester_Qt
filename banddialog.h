@@ -19,6 +19,7 @@ public:
 
 signals:
     void sendBandData(int band, int value);
+    void setBtnText(int band, QString bandBtnText);
 private slots:
     void on_pushButtonClose_clicked();
 

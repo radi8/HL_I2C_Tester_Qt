@@ -24,13 +24,15 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 public slots:
-    void bandData(int band, int value);
+
 
 private slots:
     void readData();
     void writeData(const QByteArray &data);
     void openSerialPort();
     void closeSerialPort();
+    void bandData(int band, int value);
+    void getBtnText(int band, QString btnLabel);
 
 //    void about();
     void handleError(QSerialPort::SerialPortError error);
@@ -74,6 +76,7 @@ private:
 //    bandDialog band;
     QSerialPort *serial;
     QByteArray myData;
+    QString msg;
     int lValues[8];
     int rValues[8];
     void writeSettings();

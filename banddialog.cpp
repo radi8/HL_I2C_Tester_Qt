@@ -68,6 +68,14 @@ bandDialog::~bandDialog()
         emit sendBandData(bandNumber, rValue);
         bandNumber++;
     }
+    emit setBtnText(0, ui->lineEdit->text());
+    emit setBtnText(1, ui->lineEdit_2->text());
+    emit setBtnText(2, ui->lineEdit_3->text());
+    emit setBtnText(3, ui->lineEdit_4->text());
+    emit setBtnText(4, ui->lineEdit_5->text());
+    emit setBtnText(5, ui->lineEdit_6->text());
+    emit setBtnText(6, ui->lineEdit_7->text());
+    emit setBtnText(7, ui->lineEdit_8->text());
 
     writeSettings();
     delete ui;

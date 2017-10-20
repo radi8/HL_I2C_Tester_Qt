@@ -103,6 +103,7 @@ void MainWindow::on_actionsetBands_triggered()
 {
     bandDialog band;
     connect(&band, SIGNAL(sendBandData(int,int)), this, SLOT(bandData(int,int)));
+    connect(&band, SIGNAL(setBtnText(int,QString)), this, SLOT(getBtnText(int,QString)));
     band.exec();
 
 }
@@ -111,16 +112,47 @@ void MainWindow::bandData(int band, int value)
 {
     static int lastBand = 999;
 
-//    qDebug() << "band = " << band << " and value = " << value;
     if(lastBand == band) {
         rValues[band] = value;
-        qDebug() << "rValues[" << band << "] = " <<rValues[band];
+//        qDebug() << "rValues[" << band << "] = " <<rValues[band];
     } else {
         lValues[band] = value;
-        qDebug() << "lValues[" << band << "] = " <<lValues[band];
+//        qDebug() << "lValues[" << band << "] = " <<lValues[band];
     }
     lastBand = band;
-//    qDebug() << "lValues = " <<lValues[band] << " and rValues = " << rValues[band];
+}
+
+void MainWindow::getBtnText(int band, QString btnLabel)
+{
+    switch (band) {
+    case 0:
+        ui->pushButton->setText(btnLabel);
+        break;
+    case 1:
+        ui->pushButton_1->setText(btnLabel);
+        break;
+    case 2:
+        ui->pushButton_2->setText(btnLabel);
+        break;
+    case 3:
+        ui->pushButton_3->setText(btnLabel);
+        break;
+    case 4:
+        ui->pushButton_4->setText(btnLabel);
+        break;
+    case 5:
+        ui->pushButton_5->setText(btnLabel);
+        break;
+    case 6:
+        ui->pushButton_6->setText(btnLabel);
+        break;
+    case 7:
+        ui->pushButton_7->setText(btnLabel);
+        break;
+    default:
+        qDebug() << Q_FUNC_INFO << "button Label out of range";
+        break;
+    }
 }
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)
@@ -133,18 +165,17 @@ void MainWindow::handleError(QSerialPort::SerialPortError error)
 
 void MainWindow::on_pushButton_clicked()
 {
-    QString msg;
     if(ui->pushButton_mox->isChecked()) {
         msg = QString("Band 0 clicked: data sent = %1 in binary and %2 decimal").arg(lValues[0], 8, 2, QChar('0'))
                                                                                 .arg(lValues[0], 0, 10);
         showStatusMessage(msg);
-        myData[0] = 145;
+        myData[0] = lValues[0];
         writeData(myData);
     } else {
         msg = QString("Band 0 clicked: data sent = %1 in binary and %2 decimal").arg(rValues[0], 8, 2, QChar('0'))
                                                                                 .arg(rValues[0], 0, 10);
         showStatusMessage(msg);
-        myData[0] = 17;
+        myData[0] = rValues[0];
         writeData(myData);
     }
     ui->pushButton->setChecked(true);
@@ -159,20 +190,18 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_pushButton_1_clicked()
 {
-    QString msg;
-
-    myData.resize(1);
+//    myData.resize(1);
     if(ui->pushButton_mox->isChecked()) {
-        msg = QString("Band 1 clicked: data sent = %1 in binary and %2 decimal").arg(lValues[0], 8, 2, QChar('0'))
-                                                                                .arg(lValues[0], 0, 10);
+        msg = QString("Band 1 clicked: data sent = %1 in binary and %2 decimal").arg(lValues[1], 8, 2, QChar('0'))
+                                                                                .arg(lValues[1], 0, 10);
         showStatusMessage(msg);
-        myData[0] = lValues[0];
+        myData[0] = lValues[1];
         writeData(myData);
     } else {
-        msg = QString("Band 1 clicked: data sent = %1 in binary and %2 decimal").arg(rValues[0], 8, 2, QChar('0'))
-                                                                                .arg(rValues[0], 0, 10);
+        msg = QString("Band 1 clicked: data sent = %1 in binary and %2 decimal").arg(rValues[1], 8, 2, QChar('0'))
+                                                                                .arg(rValues[1], 0, 10);
         showStatusMessage(msg);
-        myData[0] = rValues[0];
+        myData[0] = rValues[1];
         writeData(myData);
     }
     ui->pushButton->setChecked(false);
@@ -188,12 +217,16 @@ void MainWindow::on_pushButton_1_clicked()
 void MainWindow::on_pushButton_2_clicked()
 {
     if(ui->pushButton_mox->isChecked()) {
-        showStatusMessage(tr("Band 2 clicked: data sent;  1 011 0 011 = 179 decimal"));
-        myData[0] = 179;
+        msg = QString("Band 2 clicked: data sent = %1 in binary and %2 decimal").arg(lValues[2], 8, 2, QChar('0'))
+                                                                                .arg(lValues[2], 0, 10);
+        showStatusMessage(msg);
+        myData[0] = lValues[2];
         writeData(myData);
     } else {
-        showStatusMessage(tr("Band 2 clicked: data sent;  0 011 0 011 = 51 decimal"));
-        myData[0] = 51;
+        msg = QString("Band 2 clicked: data sent = %1 in binary and %2 decimal").arg(rValues[2], 8, 2, QChar('0'))
+                                                                                .arg(rValues[2], 0, 10);
+        showStatusMessage(msg);
+        myData[0] = rValues[2];
         writeData(myData);
     }
     ui->pushButton->setChecked(false);
@@ -209,12 +242,16 @@ void MainWindow::on_pushButton_2_clicked()
 void MainWindow::on_pushButton_3_clicked()
 {
     if(ui->pushButton_mox->isChecked()) {
-        showStatusMessage(tr("Band 3 clicked: data sent;  1 100 0 100 = 196 decimal"));
-        myData[0] = 196;
+        msg = QString("Band 3 clicked: data sent = %1 in binary and %2 decimal").arg(lValues[3], 8, 2, QChar('0'))
+                                                                                .arg(lValues[3], 0, 10);
+        showStatusMessage(msg);
+        myData[0] = lValues[3];
         writeData(myData);
     } else {
-        showStatusMessage(tr("Band 3 clicked: data sent;  0 100 0 100 = 68 decimal"));
-        myData[0] = 51;
+        msg = QString("Band 3 clicked: data sent = %1 in binary and %2 decimal").arg(rValues[3], 8, 2, QChar('0'))
+                                                                                .arg(rValues[3], 0, 10);
+        showStatusMessage(msg);
+        myData[0] = rValues[3];
         writeData(myData);
     }
     ui->pushButton->setChecked(false);
@@ -230,12 +267,16 @@ void MainWindow::on_pushButton_3_clicked()
 void MainWindow::on_pushButton_4_clicked()
 {
     if(ui->pushButton_mox->isChecked()) {
-        showStatusMessage(tr("Band 4 clicked: data sent;  1 101 0 101 = 213 decimal"));
-        myData[0] = 213;
+        msg = QString("Band 4 clicked: data sent = %1 in binary and %2 decimal").arg(lValues[4], 8, 2, QChar('0'))
+                                                                                .arg(lValues[4], 0, 10);
+        showStatusMessage(msg);
+        myData[0] = lValues[4];
         writeData(myData);
     } else {
-        showStatusMessage(tr("Band 4 clicked: data sent;  0 101 0 101 = 85 decimal"));
-        myData[0] = 51;
+        msg = QString("Band 4 clicked: data sent = %1 in binary and %2 decimal").arg(rValues[4], 8, 2, QChar('0'))
+                                                                                .arg(rValues[4], 0, 10);
+        showStatusMessage(msg);
+        myData[0] = rValues[4];
         writeData(myData);
     }
     ui->pushButton->setChecked(false);
@@ -251,12 +292,16 @@ void MainWindow::on_pushButton_4_clicked()
 void MainWindow::on_pushButton_5_clicked()
 {
     if(ui->pushButton_mox->isChecked()) {
-        showStatusMessage(tr("Band 5 clicked: data sent;  1 110 0 110 = 150 decimal"));
-        myData[0] = 150;
+        msg = QString("Band 5 clicked: data sent = %1 in binary and %2 decimal").arg(lValues[5], 8, 2, QChar('0'))
+                                                                                .arg(lValues[5], 0, 10);
+        showStatusMessage(msg);
+        myData[0] = lValues[5];
         writeData(myData);
     } else {
-        showStatusMessage(tr("Band 5 clicked: data sent;  0 110 0 110 = 22 decimal"));
-        myData[0] = 51;
+        msg = QString("Band 5 clicked: data sent = %1 in binary and %2 decimal").arg(rValues[5], 8, 2, QChar('0'))
+                                                                                .arg(rValues[5], 0, 10);
+        showStatusMessage(msg);
+        myData[0] = rValues[5];
         writeData(myData);
     }
     ui->pushButton->setChecked(false);
@@ -272,12 +317,16 @@ void MainWindow::on_pushButton_5_clicked()
 void MainWindow::on_pushButton_6_clicked()
 {
     if(ui->pushButton_mox->isChecked()) {
-        showStatusMessage(tr("Band 6 clicked: data sent;  1 001 0 111 = 151 decimal"));
-        myData[0] = 151;
+        msg = QString("Band 6 clicked: data sent = %1 in binary and %2 decimal").arg(lValues[6], 8, 2, QChar('0'))
+                                                                                .arg(lValues[6], 0, 10);
+        showStatusMessage(msg);
+        myData[0] = lValues[6];
         writeData(myData);
     } else {
-        showStatusMessage(tr("Band 6 clicked: data sent;  0 001 0 111 = 23 decimal"));
-        myData[0] = 51;
+        msg = QString("Band 6 clicked: data sent = %1 in binary and %2 decimal").arg(rValues[6], 8, 2, QChar('0'))
+                                                                                .arg(rValues[6], 0, 10);
+        showStatusMessage(msg);
+        myData[0] = rValues[6];
         writeData(myData);
     }
     ui->pushButton->setChecked(false);
@@ -293,12 +342,16 @@ void MainWindow::on_pushButton_6_clicked()
 void MainWindow::on_pushButton_7_clicked()
 {
     if(ui->pushButton_mox->isChecked()) {
-        showStatusMessage(tr("Band 7 clicked: data sent;  1 001 0 111 = 151 decimal"));
-        myData[0] = 151;
+        msg = QString("Band 7 clicked: data sent = %1 in binary and %2 decimal").arg(lValues[7], 8, 2, QChar('0'))
+                                                                                .arg(lValues[7], 0, 10);
+        showStatusMessage(msg);
+        myData[0] = lValues[7];
         writeData(myData);
     } else {
-        showStatusMessage(tr("Band 7 clicked: data sent;  0 001 0 111 = 23 decimal"));
-        myData[0] = 51;
+        msg = QString("Band 7 clicked: data sent = %1 in binary and %2 decimal").arg(rValues[7], 8, 2, QChar('0'))
+                                                                                .arg(rValues[7], 0, 10);
+        showStatusMessage(msg);
+        myData[0] = rValues[7];
         writeData(myData);
     }
     ui->pushButton->setChecked(false);
@@ -315,6 +368,8 @@ void MainWindow::on_pushButton_mox_clicked()
 {
     if(ui->pushButton->isChecked()) {
         on_pushButton_clicked();
+    } else if (ui->pushButton_1->isChecked()) {
+        on_pushButton_1_clicked();
     } else if (ui->pushButton_2->isChecked()) {
         on_pushButton_2_clicked();
     } else if (ui->pushButton_3->isChecked()) {

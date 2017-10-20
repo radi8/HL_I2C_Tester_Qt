@@ -7,13 +7,14 @@
 #include <QLabel>
 
 #include "settingsdialog.h"
-//#include "banddialog.h"
+#include "banddialog.h"
 
 namespace Ui {
 class MainWindow;
 }
 
-//class SettingsDialog;
+class SettingsDialog;
+class bandDialog;
 
 class MainWindow : public QMainWindow
 {
@@ -22,12 +23,15 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+public slots:
+    void bandData(int band, int value);
 
 private slots:
     void readData();
     void writeData(const QByteArray &data);
     void openSerialPort();
     void closeSerialPort();
+
 //    void about();
     void handleError(QSerialPort::SerialPortError error);
 
@@ -67,9 +71,13 @@ private:
     void showStatusMessage(const QString &message);
     QLabel *status;
     SettingsDialog *settings;
-//    bandDialog *band;
+//    bandDialog band;
     QSerialPort *serial;
     QByteArray myData;
+    int lValues[8];
+    int rValues[8];
+    void writeSettings();
+    void readSettings();
 };
 
 #endif // MAINWINDOW_H

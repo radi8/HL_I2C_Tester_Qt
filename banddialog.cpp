@@ -46,18 +46,28 @@ bandDialog::bandDialog(QWidget *parent) :
     }
 
     readSettings();
-/*
-    QString s = l_checkboxes[9]->objectName();
-    qDebug() << s << l_checkboxes[9]->isChecked();
-    qDebug() << "checkBox_18 = " << ui->checkBox_18->isChecked();
-    qDebug() << l_checkboxes;
-    qDebug() << "";
-    qDebug() << r_checkboxes;
-*/
 }
 
 bandDialog::~bandDialog()
 {
+    int bandNumber = 0;
+    int lValue = 0;
+    int rValue = 0;
+    for(int x = 7; x < l_checkboxes.length(); x += 8) {
+        lValue = 0;
+        rValue = 0;
+        for(int y = (x - 7); y <= x; y++) {
+            if(l_checkboxes[y]->isChecked()) {
+                lValue += pow(2, (x-y));
+            }
+            if(r_checkboxes[y]->isChecked()) {
+                rValue += pow(2, (x-y));
+            }
+        }
+        emit sendBandData(bandNumber, lValue);
+        emit sendBandData(bandNumber, rValue);
+        bandNumber++;
+    }
 
     writeSettings();
     delete ui;
@@ -119,3 +129,14 @@ void bandDialog::readSettings()
     }
 }
 
+void bandDialog::reject()
+{
+    qDebug() << "Band closed";
+    QDialog::hide();
+}
+
+
+void bandDialog::on_pushButtonClose_clicked()
+{
+   done(0);
+}

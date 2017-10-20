@@ -4,6 +4,7 @@
 
 #include <QMessageBox>
 #include <QtSerialPort/QSerialPort>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -20,12 +21,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
             this, &MainWindow::handleError);
     connect(serial, &QSerialPort::readyRead, this, &MainWindow::readData);
-//    connect(console, &Console::getData, this, &MainWindow::writeData);
-//    connect(ui->actionSettings, &QAction::triggered, settings, &SettingsDialog::show);
+    readSettings();
 }
 
 MainWindow::~MainWindow()
 {
+    writeSettings();
     delete ui;
 }
 //    connect(ui->actionConfigure, &QAction::triggered, settings, &SettingsDialog::show);
@@ -101,8 +102,25 @@ void MainWindow::on_actionSettings_triggered()
 void MainWindow::on_actionsetBands_triggered()
 {
     bandDialog band;
-    band.setModal(true);
+    connect(&band, SIGNAL(sendBandData(int,int)), this, SLOT(bandData(int,int)));
     band.exec();
+
+}
+
+void MainWindow::bandData(int band, int value)
+{
+    static int lastBand = 999;
+
+//    qDebug() << "band = " << band << " and value = " << value;
+    if(lastBand == band) {
+        rValues[band] = value;
+        qDebug() << "rValues[" << band << "] = " <<rValues[band];
+    } else {
+        lValues[band] = value;
+        qDebug() << "lValues[" << band << "] = " <<lValues[band];
+    }
+    lastBand = band;
+//    qDebug() << "lValues = " <<lValues[band] << " and rValues = " << rValues[band];
 }
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)
@@ -115,12 +133,17 @@ void MainWindow::handleError(QSerialPort::SerialPortError error)
 
 void MainWindow::on_pushButton_clicked()
 {
+    QString msg;
     if(ui->pushButton_mox->isChecked()) {
-        showStatusMessage(tr("Band 0 clicked: data sent;  1 001 0 001 = 145 decimal"));
+        msg = QString("Band 0 clicked: data sent = %1 in binary and %2 decimal").arg(lValues[0], 8, 2, QChar('0'))
+                                                                                .arg(lValues[0], 0, 10);
+        showStatusMessage(msg);
         myData[0] = 145;
         writeData(myData);
     } else {
-        showStatusMessage(tr("Band 0 clicked: data sent;  0 001 0 001 = 17 decimal"));
+        msg = QString("Band 0 clicked: data sent = %1 in binary and %2 decimal").arg(rValues[0], 8, 2, QChar('0'))
+                                                                                .arg(rValues[0], 0, 10);
+        showStatusMessage(msg);
         myData[0] = 17;
         writeData(myData);
     }
@@ -136,14 +159,20 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_pushButton_1_clicked()
 {
+    QString msg;
+
     myData.resize(1);
     if(ui->pushButton_mox->isChecked()) {
-        showStatusMessage(tr("Band 1 clicked: data sent;  1 010 0 010 = 162 decimal"));
-        myData[0] = 162;
+        msg = QString("Band 1 clicked: data sent = %1 in binary and %2 decimal").arg(lValues[0], 8, 2, QChar('0'))
+                                                                                .arg(lValues[0], 0, 10);
+        showStatusMessage(msg);
+        myData[0] = lValues[0];
         writeData(myData);
     } else {
-        showStatusMessage(tr("Band 1 clicked: data sent;  0 010 0 010 = 34 decimal"));
-        myData[0] = 34;
+        msg = QString("Band 1 clicked: data sent = %1 in binary and %2 decimal").arg(rValues[0], 8, 2, QChar('0'))
+                                                                                .arg(rValues[0], 0, 10);
+        showStatusMessage(msg);
+        myData[0] = rValues[0];
         writeData(myData);
     }
     ui->pushButton->setChecked(false);
@@ -321,4 +350,58 @@ void MainWindow::on_actionDisconnect_triggered()
 void MainWindow::on_actionExit_triggered()
 {
     MainWindow::close();
+}
+
+void MainWindow::writeSettings()
+{
+    QSettings settings("Hermes-Lite", "HL_I2C_Tester_Qt");
+
+    settings.setValue("lValue_0", lValues[0]);
+    settings.setValue("lValue_1", lValues[1]);
+    settings.setValue("lValue_2", lValues[2]);
+    settings.setValue("lValue_3", lValues[3]);
+    settings.setValue("lValue_4", lValues[4]);
+    settings.setValue("lValue_5", lValues[5]);
+    settings.setValue("lValue_6", lValues[6]);
+    settings.setValue("lValue_7", lValues[7]);
+
+    settings.setValue("rValue_0", rValues[0]);
+    settings.setValue("rValue_1", rValues[1]);
+    settings.setValue("rValue_2", rValues[2]);
+    settings.setValue("rValue_3", rValues[3]);
+    settings.setValue("rValue_4", rValues[4]);
+    settings.setValue("rValue_5", rValues[5]);
+    settings.setValue("rValue_6", rValues[6]);
+    settings.setValue("rValue_7", rValues[7]);
+}
+
+void MainWindow::readSettings()
+{
+    QSettings settings("Hermes-Lite", "HL_I2C_Tester_Qt");
+    ui->pushButton->setText(settings.value("band0", "Band 0").toString());
+    ui->pushButton_1->setText(settings.value("band1", "Band 1").toString());
+    ui->pushButton_2->setText(settings.value("band2", "Band 2").toString());
+    ui->pushButton_3->setText(settings.value("band3", "Band 3").toString());
+    ui->pushButton_4->setText(settings.value("band4", "Band 4").toString());
+    ui->pushButton_5->setText(settings.value("band5", "Band 5").toString());
+    ui->pushButton_6->setText(settings.value("band6", "Band 6").toString());
+    ui->pushButton_7->setText(settings.value("band7", "Band 7").toString());
+
+    lValues[0] = (settings.value("lValue_0", "0").toInt());
+    lValues[1] = (settings.value("lValue_1", "0").toInt());
+    lValues[2] = (settings.value("lValue_2", "0").toInt());
+    lValues[3] = (settings.value("lValue_3", "0").toInt());
+    lValues[4] = (settings.value("lValue_4", "0").toInt());
+    lValues[5] = (settings.value("lValue_5", "0").toInt());
+    lValues[6] = (settings.value("lValue_6", "0").toInt());
+    lValues[7] = (settings.value("lValue_7", "0").toInt());
+
+    rValues[0] = (settings.value("rValue_0", "0").toInt());
+    rValues[1] = (settings.value("rValue_1", "0").toInt());
+    rValues[2] = (settings.value("rValue_2", "0").toInt());
+    rValues[3] = (settings.value("rValue_3", "0").toInt());
+    rValues[4] = (settings.value("rValue_4", "0").toInt());
+    rValues[5] = (settings.value("rValue_5", "0").toInt());
+    rValues[6] = (settings.value("rValue_6", "0").toInt());
+    rValues[7] = (settings.value("rValue_7", "0").toInt());
 }

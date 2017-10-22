@@ -37,3 +37,9 @@ Makefile*
 # QtCtreator CMake
 CMakeLists.txt.user*
 
+# emacs
+.\#*
+*~
+
+# the app itself
+HL_I2C_Tester_Qt

@@ -2,6 +2,8 @@
 #include "ui_banddialog.h"
 #include "mainwindow.h"
 
+#include <cmath>
+
 #include <QDebug>
 
 bandDialog::bandDialog(QWidget *parent) :

@@ -1,0 +1,70 @@
+environment:
+  matrix:
+    - MSYSTEM : MINGW64
+      MBITS: 64
+      MARCH: x86_64
+    - MSYSTEM : MINGW32
+      MBITS: 32
+      MARCH: i686
+
+platform:
+  - x64
+
+install:
+  # Take a look at the environment
+  - set
+
+  - set "PATH=C:\msys64\usr\bin;C:\msys64\mingw%MBITS%\bin;%PATH%"
+
+  - bash -lc ""
+  - bash -lc "pacman --version"
+  - bash -lc "pacman -Q"
+  # Switch from SF to msys2.org (default, much faster)
+  - bash -lc "pacman --noconfirm --sync pacman-mirrors"
+  - bash -lc "pacman --noconfirm -S mingw-w64-%MARCH%-qt5-static"
+  # japser is needed for linking but copying the dll is not needed (??)
+  - bash -lc "pacman --noconfirm -S mingw-w64-%MARCH%-jasper"
+
+  - set "PATH=C:\msys64\mingw%MBITS%\qt5-static\bin;%PATH%"
+
+  # Set compiler (64bit)
+  - set "CC=/c/msys64/mingw%MBITS%/bin/gcc.exe"
+  - set "CXX=/c/msys64/mingw%MBITS%/bin/g++.exe"
+
+build_script:
+  ## Notes
+  #  * The "exec 0</dev/null" opens a dummy file descriptor to fix error: ./configure: line 560: 0: Bad file descriptor
+
+  ## Build static application in release mode (executable is smaller)
+  - bash -lc "cd $APPVEYOR_BUILD_FOLDER && qmake CONFIG+=release"
+  - bash -lc "cd $APPVEYOR_BUILD_FOLDER && make"
+  #- bash -lc "cd /c/HL_I2C_Tester_Qt-win%MBITS%/bin  && ./HL_I2C_Tester_Qt -v"
+  - bash -lc "cd $APPVEYOR_BUILD_FOLDER && ls -l
+  - bash -lc "cd $APPVEYOR_BUILD_FOLDER && ls -l release/
+  - bash -lc "cd $APPVEYOR_BUILD_FOLDER && ldd release/HL_I2C_Tester_Qt.exe
+
+  # Copy required libraries, make binaries usable from command line, Windows Explorer
+  # (none for the moment, as Qt is statically linked)
+  - set QTDIR=c:\msys64\mingw%MBITS%\
+  - set APPDIR=c:\HL_I2C_Tester_Qt-win%MBITS%\
+  - mkdir -p %APPDIR%
+  - cp %APPVEYOR_BUILD_FOLDER%\release\HL_I2C_Tester_Qt.exe %APPDIR%
+
+  # apparently, before Windows Vista, the dwmapi.dll is needed (a fake dll from Wine may work also)
+  # but support for Windows XP was dropped after the Qt 5.6 LTS release
+  # we may need to go back to that version if running the app on Windows XP is needed
+
+  # test from windows cmd
+  - cd %APPDIR%
+  - dir
+  
+after_build:
+  #  artifacts path is always relative to build folder, so put the zip there
+  - 7z a %APPVEYOR_BUILD_FOLDER%\HL_I2C_Tester_Qt-win%MBITS%.zip %APPDIR%
+
+artifacts:
+  # variables here must use the PowerShell syntax
+  - path: HL_I2C_Tester_Qt-win$(MBITS).zip
+    name: HL_I2C_Tester_Qt-win$(MBITS).zip
+
+
